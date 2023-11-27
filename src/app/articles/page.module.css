@@ -1,0 +1,17 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6rem;
+  min-height: 100vh;
+}
+
+.description {
+  color: #8a8a8a;
+}
+
+.search {
+  display: flex;
+  justify-content: center;
+}
+
