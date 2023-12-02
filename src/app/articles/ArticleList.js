@@ -1,7 +1,7 @@
 'use client'
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import {getAllArticles} from './api'
+import { getAllArticles } from './api'
 
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
