@@ -30,7 +30,8 @@ export const userLogin = async (event) => {
         const response = await axios.post(`${BASE_URL}/user/login`, requestData, {
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
+            withCredentials: true,
         });
         console.log('Login Response:', response);
     } catch (error) {
@@ -51,6 +52,5 @@ export const userLogin = async (event) => {
     if (mypage) {
         redirect('/mypage');
     }
-   
-};
 
+};
