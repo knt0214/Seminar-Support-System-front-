@@ -47,10 +47,7 @@
 
 .card {
   padding: 1rem 0;
-  border-radius: var(--border-radius);
-  background: rgba(var(--card-rgb), 0);
-  border: 1px solid rgba(var(--card-border-rgb), 0);
-  transition: background 200ms, border 200ms;
+  border-radius: 10px;
   width: 450px; /* 右端が450pxに合うように幅を指定 */
   box-sizing: border-box; /* paddingが含まれるようにbox-sizingを指定 */
   text-align: right;
@@ -60,13 +57,15 @@
 }
 
 .card:hover {
-  color: #6dfccf; /* 背景色の変化 */
+  background-color: rgba(84, 83, 83, 0.8);
+  color: #6de7ff; /* 背景色の変化 */
   text-shadow: 0px 2px rgba(0, 12, 94, 0.5); /* ホバー時の文字に影を追加 */
 }
 
 .card:not(:hover) {
   color: initial; /* ホバー解除時の文字色を元に戻す */
   text-shadow: none; /* ホバー解除時の文字の影を解除 */
+  background-color: transparent;
 }
 
 .cardContainer {
