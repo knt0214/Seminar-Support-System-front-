@@ -25,7 +25,7 @@ export const userLogin = async (event) => {
         "password": formData.get('password')
     };
 
-    try {   
+    try {
         const response = await axios.post(`${BASE_URL}/user/login`, requestData, {
             headers: {
                 'Content-Type': 'application/json',
@@ -41,10 +41,15 @@ export const userLogin = async (event) => {
 
 // 自分の記事一覧を取得する
 export const fetchMyarticles = async () => {
-    try {   
-        const mypageResponse = await axios.get(`${BASE_URL}/articles/myarticles`);
-        console.log('Mypage Response:', mypageResponse.data);
-        return mypageResponse;
+    try {
+        const mypageResponse = await axios.get(`${BASE_URL}/articles/myarticles`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+        });
+        console.log('Mypage Response:', mypageResponse);
+        return mypageResponse.data;
 
     } catch (error) {
         console.error('Error fetching myarticles data:', error);

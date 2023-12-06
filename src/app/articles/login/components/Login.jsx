@@ -28,10 +28,6 @@ export default function SignIn() {
       const loginData = await userLogin(event);
       console.log('loginData:', loginData);
 
-      // //my記事一覧取得
-      // const myArticles = await fetchMyarticles();
-      // console.log('myArticles:', myArticles);
-
       //マイページにリダイレクト
       router.replace('/articles/mypage');
 
