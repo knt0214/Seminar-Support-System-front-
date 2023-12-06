@@ -2,14 +2,18 @@
 
 import ButtonAppBar from '../../components/AppBar';
 import Footer from '../../components/Footer';
+import styles from '../page.module.css'
 
-const mypage = ({mypage}) => {
+import { Typography } from '@mui/material';
+
+
+const mypage = () => {
     return (
-        <div>
+        <main className={styles.main}>
             <ButtonAppBar />
-            Enter
+            <Typography variant="h3" >マイページ！</Typography>
             <Footer />
-        </div>
+        </main>
     );
 }
 

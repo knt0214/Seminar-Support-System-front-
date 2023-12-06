@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import axios from "axios";
 
 const BASE_URL = 'http://localhost:8080';
@@ -15,10 +14,10 @@ export const getAllArticles = async () => {
 
 };
 
+//ログイン処理
 export const userLogin = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    let mypage = undefined;
 
     const requestData = {
         "session": true,
@@ -26,7 +25,7 @@ export const userLogin = async (event) => {
         "password": formData.get('password')
     };
 
-    try {   //ログイン処理
+    try {   
         const response = await axios.post(`${BASE_URL}/user/login`, requestData, {
             headers: {
                 'Content-Type': 'application/json',
@@ -34,23 +33,20 @@ export const userLogin = async (event) => {
             withCredentials: true,
         });
         console.log('Login Response:', response);
+        return response;
     } catch (error) {
         console.error('Error fetching login data:', error);
     }
+};
 
-    try {   // ログイン成功時に記事一覧を取得する
+// 自分の記事一覧を取得する
+export const fetchMyarticles = async () => {
+    try {   
         const mypageResponse = await axios.get(`${BASE_URL}/articles/myarticles`);
         console.log('Mypage Response:', mypageResponse.data);
+        return mypageResponse;
 
-        // 得られた情報をmypageにセット
-        mypage = mypageResponse.data;
     } catch (error) {
         console.error('Error fetching myarticles data:', error);
     }
-
-    //リダイレクト処理
-    if (mypage) {
-        redirect('/mypage');
-    }
-
-};
+}

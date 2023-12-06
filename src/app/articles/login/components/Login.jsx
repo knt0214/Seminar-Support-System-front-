@@ -1,6 +1,7 @@
 'use client'
 import * as React from 'react';
-import { userLogin } from '../../api';
+import { userLogin, fetchMyarticles } from '../../api';
+import { useRouter } from 'next/navigation';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -20,6 +21,25 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const router = useRouter();
+  const clickLogIn = async (event) => {
+    try{
+      //ログイン
+      const loginData = await userLogin(event);
+      console.log('loginData:', loginData);
+
+      // //my記事一覧取得
+      // const myArticles = await fetchMyarticles();
+      // console.log('myArticles:', myArticles);
+
+      //マイページにリダイレクト
+      router.replace('/articles/mypage');
+
+    } catch (error) {
+      console.error('User LogIn Error: ', error);
+    }
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -38,7 +58,7 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Log In
           </Typography>
-          <Box component="form" onSubmit={userLogin} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={clickLogIn} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
