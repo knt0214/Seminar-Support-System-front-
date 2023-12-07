@@ -7,7 +7,6 @@ import styles from '../page.module.css';
 import { useState, useEffect } from 'react';
 import { fetchMyarticles } from '../api';
 
-import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
@@ -15,6 +14,7 @@ import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
 
 
 const mypage = () => {
@@ -49,14 +49,7 @@ const mypage = () => {
 
 
             {articles.map((article) => (
-                <Grid
-                    container
-                    direction="column"
-                    justifyContent="flex-start"
-                    alignItems="center"
-                >
-                    <Grid item xs={10} md={6}>
-                        <Card md={minwidth = "900"} >
+                        <Card sx={{minwidth:275}} >
                             <CardContent>
                                 <Typography variant="h5" component="div">
                                     {article.title}
@@ -69,8 +62,7 @@ const mypage = () => {
                                 <Button size="small">Learn More</Button>
                             </CardActions>
                         </Card>
-                    </Grid>
-                </Grid>
+
             ))}
 
 
