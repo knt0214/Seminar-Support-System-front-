@@ -38,7 +38,7 @@ const articles = () => {
             </Grid>
 
             <Link href='/articles/login'>
-                <Button variant="contained">新規投稿</Button>
+                <Button variant="contained">投稿者マイページ</Button>
             </Link>
 
             <h3 mb={3}>記事一覧</h3>

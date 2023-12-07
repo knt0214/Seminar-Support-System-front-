@@ -55,3 +55,27 @@ export const fetchMyarticles = async () => {
         console.error('Error fetching myarticles data:', error);
     }
 }
+
+//新規投稿
+export const createArticle = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    const requestData = {
+        "title": formData.get('title'),
+        "text": formData.get('text')
+    };
+
+    try {
+        const response = await axios.post(`${BASE_URL}/articles`, requestData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+        });
+        console.log('CreateArticle Response:', response);
+        return response;
+    } catch (error) {
+        console.error('Error Creating Article:', error);
+    }
+};

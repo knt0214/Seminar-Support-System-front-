@@ -7,10 +7,9 @@ body {
   width: 100vw; /* ウィンドウ幅に合わせる */
   height: 100vh;
   margin: 0;
-  overflow: hidden;
   width: 100%;
   background: linear-gradient(
-    315deg, /* 方向を変更 */
+    270deg, /* 方向を変更 */
     rgba(171, 176, 255, 1),
     rgb(213, 253, 244) 25%, /* 色1の割合を調整 */
     rgb(237, 229, 253) 50%, /* 色2の割合を調整 */
