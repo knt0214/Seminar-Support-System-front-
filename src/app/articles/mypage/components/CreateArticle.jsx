@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { createArticle } from '../../api';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -22,17 +23,47 @@ const defaultTheme = createTheme();
 
 export default function CreateArticle() {
   const router = useRouter();
+
+  const [formData, setFormData] = useState({
+    title: '',
+    text: '',
+  });
+
+  const [successMessage, setSuccessMessage] = useState('');
+
   const createArti = async (event) => {
-    try{
+    try {
       //新規投稿
       const createdArticle = await createArticle(event);
       console.log('Created Article:', createdArticle);
 
-      router.refresh();
+      // フォームデータをクリア
+      setFormData({
+        title: '',
+        text: '',
+      });
+
+      // 投稿成功メッセージを表示
+      setSuccessMessage('記事を投稿しました！');
+
+      // 一定時間後にメッセージをクリア（3秒後）
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 3000);
+
+      router.replace('/articles/mypage');
 
     } catch (error) {
       console.error('Creat Article Error: ', error);
     }
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   return (
@@ -47,6 +78,16 @@ export default function CreateArticle() {
             alignItems: 'center',
           }}
         >
+          {successMessage && (
+            <Typography style={{
+              backgroundColor: 'lightgreen',
+              padding: '8px',
+              borderRadius: '4px', color: 'green'
+            }} gutterBottom>
+              {successMessage}
+            </Typography>
+          )}
+
           <Typography component="h1" variant="h5">
             記事情報を入力してください
           </Typography>
@@ -60,6 +101,9 @@ export default function CreateArticle() {
               name="title"
               autoComplete="title"
               autoFocus
+
+              value={formData.title}
+              onChange={handleInputChange}
             />
             <TextField
               margin="normal"
@@ -70,6 +114,9 @@ export default function CreateArticle() {
               type="text"
               id="text"
               autoComplete="text"
+
+              value={formData.text}
+              onChange={handleInputChange}
             />
             <Button
               type="submit"

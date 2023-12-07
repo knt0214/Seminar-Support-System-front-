@@ -30,7 +30,7 @@ const mypage = () => {
             setArticles(data);
         };
         fetchData();
-    }, []);
+    }, [articles]);
 
     // ボタンクリックでCreateArticleを表示/非表示切り替え
     const toggleCreateArticle = () => {
@@ -49,19 +49,19 @@ const mypage = () => {
 
 
             {articles.map((article) => (
-                        <Card sx={{minwidth:275}} >
-                            <CardContent>
-                                <Typography variant="h5" component="div">
-                                    {article.title}
-                                </Typography>
-                                <Typography variant="body2">
-                                    {article.text}
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Button size="small">Learn More</Button>
-                            </CardActions>
-                        </Card>
+                <Card sx={{ minWidth: 275 }} >
+                    <CardContent>
+                        <Typography variant="h5" component="div">
+                            {article.title}
+                        </Typography>
+                        <Typography variant="body2">
+                            {article.text}
+                        </Typography>
+                    </CardContent>
+                    <CardActions>
+                        <Button size="small">Learn More</Button>
+                    </CardActions>
+                </Card>
 
             ))}
 
