@@ -79,3 +79,19 @@ export const createArticle = async (event) => {
         console.error('Error Creating Article:', error);
     }
 };
+
+//記事の削除
+export const deleteArticle = async (articleId) => {
+    try {
+        const response = await axios.delete(`${BASE_URL}/articles/${articleId}`,{
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true
+        });
+        return response;
+
+    } catch (error) {
+        console.error('Delete Article Error:', error)
+    }
+};
