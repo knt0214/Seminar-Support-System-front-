@@ -5,7 +5,7 @@ import Footer from '../../components/Footer';
 import CreateArticle from './components/CreateArticle';
 import styles from '../page.module.css';
 import { useState, useEffect } from 'react';
-import { fetchMyarticles, deleteArticle } from '../api';
+import { fetchMyarticles, deleteArticle, updateArticle } from '../api';
 
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -23,6 +23,12 @@ const mypage = () => {
     const [articles, setArticles] = useState([]);
     const [showCreateArticle, setShowCreateArticle] = useState(false);
     const [deleteSuccessMessage, setDeleteSuccessMessage] = useState('');
+
+    // 編集状態のための状態変数を追加
+    const [editMode, setEditMode] = useState(false);
+    const [editedTitle, setEditedTitle] = useState('');
+    const [editedText, setEditedText] = useState('');
+    const [editArticleId, setEditArticleId] = useState(null);
 
 
     //記事一覧を取得
@@ -61,6 +67,59 @@ const mypage = () => {
         }
     };
 
+    // 編集機能の追加
+    // 編集モードに入るための関数
+    const enterEditMode = (articleId, title, text) => {
+        setEditArticleId(articleId);
+        setEditedTitle(title);
+        setEditedText(text);
+        setEditMode(true);
+    };
+
+    // 編集モードから出るための関数
+    const exitEditMode = () => {
+        setEditArticleId(null);
+        setEditedTitle('');
+        setEditedText('');
+        setEditMode(false);
+    };
+
+    // 編集フォームでの変更を処理する関数
+    const handleEditChange = (event) => {
+        const { name, value } = event.target;
+        if (name === 'title') {
+            setEditedTitle(value);
+        } else if (name === 'text') {
+            setEditedText(value);
+        }
+    };
+
+    const handleSaveEdit = async () => {
+        try {
+            const response = await updateArticle(editArticleId, {
+                title: editedTitle,
+                text: editedText
+            });
+
+            // 更新が成功した場合の処理
+            console.log('Article updated successfully:', response.data);
+
+            // 編集された内容でstate内の記事を更新
+            setArticles((prevArticles) =>
+                prevArticles.map((article) =>
+                    article.id === editArticleId
+                        ? { ...article, title: editedTitle, text: editedText }
+                        : article
+                )
+            );
+
+            // 編集モードから出る
+            exitEditMode();
+        } catch (error) {
+            console.error('記事を編集できませんでした:', error);
+        }
+    };
+
     return (
 
 
@@ -84,27 +143,65 @@ const mypage = () => {
             {articles.map((article) => (
                 <Card sx={{ minWidth: 275 }} key={article.id} >
                     <CardContent>
+                        {/* 編集モードの場合は編集された内容を表示、そうでない場合は元の内容を表示 */}
                         <Typography variant="h5" component="div">
-                            {article.title}
+                            {editArticleId === article.id ? (
+                                <input
+                                    type="text"
+                                    name="title"
+                                    value={editedTitle}
+                                    onChange={handleEditChange}
+                                />
+                            ) : (
+                                article.title
+                            )}
                         </Typography>
                         <Typography variant="body2">
-                            {article.text}
+                            {editArticleId === article.id ? (
+                                <textarea
+                                    name="text"
+                                    value={editedText}
+                                    onChange={handleEditChange}
+                                />
+                            ) : (
+                                article.text
+                            )}
                         </Typography>
                     </CardContent>
                     <CardActions>
+                        {/* 編集モードに応じて「編集」ボタンと「保存」ボタンを切り替える */}
+                        {editMode && editArticleId === article.id ? (
+                            <Button
+                                variant="outlined"
+                                color="success"
+                                size="small"
+                                onClick={handleSaveEdit}
+                            >
+                                保存
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="outlined"
+                                color="success"
+                                size="small"
+                                onClick={() =>
+                                    enterEditMode(article.id, article.title, article.text)
+                                }
+                            >
+                                編集
+                            </Button>
+                        )}
                         <Button
                             variant="outlined"
                             color="error"
                             size="small"
                             onClick={() => handleDeleteArticle(article.id)}
                         >
-                            Delete
+                            削除
                         </Button>
                     </CardActions>
                 </Card>
-
             ))}
-
 
 
             <Footer />

@@ -95,3 +95,19 @@ export const deleteArticle = async (articleId) => {
         console.error('Delete Article Error:', error)
     }
 };
+
+//記事の編集
+export const updateArticle = async (articleId, updatedData) => {
+    try {
+      const response = await axios.put(`${BASE_URL}/articles/${articleId}`, updatedData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true
+      });
+      return response;
+    } catch (error) {
+      console.error('Update Article Error:', error);
+      throw error; // エラーを呼び出し元に投げる
+    }
+  };
