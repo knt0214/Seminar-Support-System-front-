@@ -6,7 +6,6 @@ import { Button } from "@mui/material";
 const login = () => {
     return (
         <div>
-            Enter
             <Link href='/articles'>
                 <Button>記事一覧</Button>
             </Link>
