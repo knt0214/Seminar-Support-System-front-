@@ -21,7 +21,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const defaultTheme = createTheme();
 
-export default function CreateArticle() {
+export default function CreateArticle({ fetchData }) {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -51,7 +51,8 @@ export default function CreateArticle() {
         setSuccessMessage('');
       }, 3000);
 
-      router.replace('/articles/mypage');
+      // 記事一覧の再取得
+      fetchData();
 
     } catch (error) {
       console.error('Creat Article Error: ', error);

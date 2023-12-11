@@ -32,6 +32,10 @@ const mypage = () => {
 
 
     //記事一覧を取得
+    const fetchData = async () => {
+        const data = await fetchMyarticles();
+        setArticles(data);
+    };
     useEffect(() => {
         const fetchData = async () => {
             const data = await fetchMyarticles();
@@ -128,7 +132,7 @@ const mypage = () => {
             <Typography variant="h3" >マイページ！</Typography>
             <Button variant="contained" onClick={toggleCreateArticle} >新規投稿</Button>
 
-            {showCreateArticle && <CreateArticle />}
+            {showCreateArticle && <CreateArticle fetchData={fetchData}/>}
 
             {deleteSuccessMessage && (
                 <Typography style={{
