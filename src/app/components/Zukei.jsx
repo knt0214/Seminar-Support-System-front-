@@ -2,23 +2,38 @@
 
 import { useEffect, useRef } from 'react';
 
-const Zukei = () => {
-    const canvasRef = useRef(null);
+const Zukei = ({ className, delay }) => {
+  const canvasRef = useRef(null);
 
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        const context = canvas.getContext('2d');
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    let position = -450; // 初期位置を左側の外に設定
 
-        // 描画ロジック
-        context.beginPath();
-        context.moveTo(0, 10); // 開始点 (x, y)
-        context.lineTo(450, 10); // 終了点 (x, y)
-        context.stroke();
-    }, []);
+    const draw = () => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.beginPath();
+      context.moveTo(position, 10);
+      context.lineTo(position + 450, 10);
+      context.stroke();
+    };
 
-    return (
-        <canvas ref={canvasRef} width={450} height={10} />
-    );
-}
+    const animate = () => {
+      position += 10; // 移動速度
+
+      draw();
+
+      if (position < 0) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    const animationFrameId = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [canvasRef, delay]);
+
+  return <canvas ref={canvasRef} className={`${className} slideInFromLeft`} width={450} height={10} />;
+};
 
 export default Zukei;
