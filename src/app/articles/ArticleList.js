@@ -22,16 +22,17 @@ const ArticleList = () => {
 
   return (
     <div>
-      {articles.map((Title, Text) => (
-        <Card sx={{ minWidth: 300, maxWidth: 1000 }} key={Title}>
+      {articles.map((article) => (
+        <Card sx={{ minWidth: 300, maxWidth: 1000 }} key={article.id}>
           <CardContent>
             <Typography variant="h5" component="div">
-              {Title}
+              {article.title}
+            </Typography>
+            <Typography variant="body2" component="div">
+              投稿者：{article.author}
             </Typography>
             <Typography variant="body2">
-              {Text}
-              <br />
-              {'"a benevolent smile"'}
+              {article.text}
             </Typography>
           </CardContent>
           <CardActions>

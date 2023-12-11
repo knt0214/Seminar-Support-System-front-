@@ -42,7 +42,7 @@ const articles = () => {
             </Link>
 
             <h3 mb={3}>記事一覧</h3>
-            
+            <ArticleList />
 
             <Footer />
         </main>
