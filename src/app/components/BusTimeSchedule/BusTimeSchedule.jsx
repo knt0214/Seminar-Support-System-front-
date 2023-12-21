@@ -13,6 +13,7 @@ const BusTimeSchedule = () => {
       try {
         const response = await fetch('/bus-schedule.txt');
         const data = await response.text();
+        console.log('TimeTableData:', data)
         const scheduleData = data.split('\n').filter((time) => time.trim() !== '');
         setSchedule(scheduleData);
       } catch (error) {
@@ -26,14 +27,19 @@ const BusTimeSchedule = () => {
   useEffect(() => {
     const currentDateTime = new Date();
     const currentTime = currentDateTime.getHours() * 60 + currentDateTime.getMinutes();
+    console.log('Current Time: ', currentTime)
 
     const closestBusTime = (schedule || [])
       .map((time) => {
         const [hour, minute] = time.split(':').map(Number);
-        return hour * 60 + minute;
-      })
-      .reduce((closest, time) => (Math.abs(time - currentTime) < Math.abs(closest - currentTime) ? time : closest), Infinity);
+        const timeInMinutes = hour * 60 + minute;
 
+        // 現在の時刻よりも未来の時刻のみを考慮する
+        return timeInMinutes >= currentTime ? timeInMinutes : Infinity;
+      })
+      .reduce((closest, time) => Math.min(time, closest), Infinity);
+
+    console.log('Closest Bus Time: ', closestBusTime)
     setClosestTime(closestBusTime);
   }, [schedule]);
 
@@ -41,12 +47,22 @@ const BusTimeSchedule = () => {
     const calculateCountdown = () => {
       if (closestTime !== null) {
         const currentDateTime = new Date();
-        const currentMillis =
-          currentDateTime.getHours() * 60 * 60 * 1000 +
-          currentDateTime.getMinutes() * 60 * 1000 +
-          currentDateTime.getSeconds() * 1000;
-        const busTimeMillis = closestTime * 60 * 1000;
+
+        // UTC時間で計算する
+        const currentMillis = currentDateTime.getTime();
+        const busTimeMillis = new Date(currentDateTime);
+
+        // closestTimeは分単位のため、ミリ秒に変換して加算
+        busTimeMillis.setHours(Math.floor(closestTime / 60));
+        busTimeMillis.setMinutes(closestTime % 60);
+        busTimeMillis.setSeconds(0);
+        busTimeMillis.setMilliseconds(0);
+
         const countdownMillis = busTimeMillis - currentMillis;
+
+        console.log('currentMillis:', currentMillis);
+        console.log('busTimeMillis:', busTimeMillis.getTime());
+        console.log('countdownMillis:', countdownMillis);
 
         return countdownMillis < 0 ? null : countdownMillis;
       }
@@ -56,6 +72,7 @@ const BusTimeSchedule = () => {
 
     const updateCountdown = () => {
       const countdownValue = calculateCountdown();
+      console.log('CountDown Value: ', countdownValue)
       setCountdown(countdownValue);
     };
 
@@ -78,12 +95,13 @@ const BusTimeSchedule = () => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Next Bus Schedule</h1>
       {closestTime !== null ? (
         <div>
           <p>次のバス: {formatBusTime(closestTime)}</p>
-          <p>発車まで: {formatCountdown(countdown)}</p>
+          <p>発車まで</p>
+          <p className={styles.clock}>{formatCountdown(countdown)}</p>
         </div>
       ) : (
         <p>No upcoming bus schedule.</p>
